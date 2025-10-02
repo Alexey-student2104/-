@@ -1,4 +1,4 @@
-from main import Solution 
+from Lab1 import Solution 
 
 from main import my_solution
 
@@ -114,3 +114,4 @@ class TestTwoSum(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
