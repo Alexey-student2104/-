@@ -495,8 +495,9 @@ class TestSolveQuadratic(unittest.TestCase):
 
 ## 📌 6. Логи в файлах currency.log и quadratic.log
 
-![Uploading currency_log.jpg…]()
-![Uploading quadratic_log.jpg…]()
+![currency_log](https://github.com/user-attachments/assets/01addc6b-3da7-48cc-b130-099db0525ad6)
+
+![quadratic_log](https://github.com/user-attachments/assets/8f124899-e63d-4cbb-aaf7-5f492b8cbdf2)
 
 ---
 
