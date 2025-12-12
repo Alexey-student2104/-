@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Валюты{% endblock %}
+
+{% block content %}
+<h1>Курсы валют</h1>
+
+{% if session.get('user_id') and is_admin_user(session.get('user_id')) %}
+<div style="margin-bottom: 20px;">
+    <a href="{{ url_for('fetch_currencies') }}" class="btn-submit">Обновить курсы с ЦБ РФ</a>
+</div>
+{% endif %}
+
+<div class="currencies-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>NumCode</th>
+                <th>CharCode</th>
+                <th>Название</th>
+                <th>Курс</th>
+                <th>Номинал</th>
+                {% if session.get('user_id') and is_admin_user(session.get('user_id')) %}
+                <th>Действия</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for currency in currencies %}
+            <tr>
+                <td>{{ currency.id }}</td>
+                <td>{{ currency.num_code }}</td>
+                <td>{{ currency.char_code }}</td>
+                <td>{{ currency.name }}</td>
+                <td>{{ "%.2f"|format(currency.value) }} ₽</td>
+                <td>{{ currency.nominal }}</td>
+                {% if session.get('user_id') and is_admin_user(session.get('user_id')) %}
+                <td>
+                    <a href="{{ url_for('delete_currency_route', id=currency.id) }}" 
+                       class="btn-delete"
+                       onclick="return confirm('Удалить валюту?')">Удалить</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

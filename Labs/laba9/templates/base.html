@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Валюты{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-logo">Валютный портал</a>
+            <div class="nav-menu">
+                <a href="{{ url_for('index') }}">Главная</a>
+                <a href="{{ url_for('author') }}">Об авторе</a>
+                {% if session.get('user_id') %}
+                    <a href="{{ url_for('users') }}">Пользователи</a>
+                    <a href="{{ url_for('currencies') }}">Валюты</a>
+                    {% if session.get('user_id') and is_admin_user(session.get('user_id')) %}
+                        <a href="{{ url_for('admin') }}">Админ-панель</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}">Выйти ({{ session.get('username') }})</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Войти</a>
+                    <a href="{{ url_for('register') }}">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <footer>
+        <p>Мамонтов Алексей, группа P3120, дисциплина "Программирование на Python"</p>
+    </footer>
+</body>
+</html>
