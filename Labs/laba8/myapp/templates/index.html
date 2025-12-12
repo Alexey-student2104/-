@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app.name }} - Главная</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="/" class="nav-link active">Главная</a>
+            <a href="/author" class="nav-link">Автор</a>
+            <a href="/currencies" class="nav-link">Валюты</a>
+            <a href="/users" class="nav-link">Пользователи</a>
+        </nav>
+
+        <h1>{{ app.name }}</h1>
+        <p>Версия {{ app.version }}</p>
+
+        <div class="dashboard">
+            <div class="card">
+                <h2>👨‍💻 Автор</h2>
+                <p><strong>Имя:</strong> {{ app.author.name }}</p>
+                <p><strong>Группа:</strong> {{ app.author.group }}</p>
+            </div>
+
+            <div class="card">
+                <h2>💰 Валюты</h2>
+                <ul>
+                    {% for currency in currencies %}
+                    <li>{{ currency.char_code }} - {{ currency.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>👥 Пользователи</h2>
+                <ul>
+                    {% for user in users %}
+                    <li>{{ user.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>{{ app.name }} v{{ app.version }} • {{ current_year }}</p>
+        </footer>
+    </div>
+</body>
+</html>

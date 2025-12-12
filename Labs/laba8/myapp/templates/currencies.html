@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app.name }} - Валюты</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="/" class="nav-link">Главная</a>
+            <a href="/author" class="nav-link">Автор</a>
+            <a href="/currencies" class="nav-link active">Валюты</a>
+            <a href="/users" class="nav-link">Пользователи</a>
+        </nav>
+
+        <h1>Курсы валют</h1>
+
+        <div class="currency-list">
+            {% for currency in currencies %}
+            <div class="currency-card">
+                <div class="currency-code">{{ currency.char_code }}</div>
+                <div class="currency-name">{{ currency.name }}</div>
+                <div class="currency-value">{{ "%.2f"|format(currency.value) }} ₽</div>
+                <div class="currency-details">
+                    Код: {{ currency.num_code }} • Номинал: {{ currency.nominal }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

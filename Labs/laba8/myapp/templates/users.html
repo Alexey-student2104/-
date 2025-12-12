@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app.name }} - Пользователи</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="/" class="nav-link">Главная</a>
+            <a href="/author" class="nav-link">Автор</a>
+            <a href="/currencies" class="nav-link">Валюты</a>
+            <a href="/users" class="nav-link active">Пользователи</a>
+        </nav>
+
+        <h1>Пользователи</h1>
+
+        <div class="user-list">
+            {% for user in users %}
+            <div class="user-card">
+                <div class="user-info">
+                    <h3>{{ user.name }}</h3>
+                    <p>ID: {{ user.id }}</p>
+                </div>
+                <div class="user-subscriptions">
+                    {% if user.subscribed_currencies %}
+                        Подписки: 
+                        {% for currency in user.subscribed_currencies %}
+                        <span class="badge">{{ currency.char_code }}</span>
+                        {% endfor %}
+                    {% else %}
+                        Нет подписок
+                    {% endif %}
+                </div>
+                <div class="user-actions">
+                    <a href="/user?id={{ user.id }}" class="btn">Просмотр</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

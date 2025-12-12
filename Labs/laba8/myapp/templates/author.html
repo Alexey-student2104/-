@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app.name }} - Автор</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="/" class="nav-link">Главная</a>
+            <a href="/author" class="nav-link active">Автор</a>
+            <a href="/currencies" class="nav-link">Валюты</a>
+            <a href="/users" class="nav-link">Пользователи</a>
+        </nav>
+
+        <h1>Об авторе</h1>
+        
+        <div class="card">
+            <h2>{{ app.author.name }}</h2>
+            <p><strong>Группа:</strong> {{ app.author.group }}</p>
+            <p><strong>Приложение:</strong> {{ app.name }}</p>
+            <p><strong>Версия:</strong> {{ app.version }}</p>
+        </div>
+    </div>
+</body>
+</html>
