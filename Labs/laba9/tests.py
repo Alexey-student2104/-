@@ -116,7 +116,7 @@ class TestCurrencyApp(unittest.TestCase):
             self.assertEqual(saved.nominal, 1)
     
     def test_04_user_registration_flow(self):
-        """Тест 6: Полный цикл регистрации пользователя"""
+        """Тест 4: Полный цикл регистрации пользователя"""
         # Шаг 1: Регистрация
         response = self.client.post('/register', data={
             'username': 'NewTestUser',
@@ -133,7 +133,7 @@ class TestCurrencyApp(unittest.TestCase):
             self.assertFalse(user.is_admin)
     
     def test_05_admin_user_creation(self):
-        """Тест 8: Создание пользователя с правами администратора"""
+        """Тест 5: Создание пользователя с правами администратора"""
         with self.app.app_context():
             admin = self.User(
                 username="SuperAdmin",
@@ -147,7 +147,7 @@ class TestCurrencyApp(unittest.TestCase):
             self.assertTrue(saved.is_admin)
     
     def test_06_crud_create_currency(self):
-        """Тест 9: CRUD - Create (Создание валюты)"""
+        """Тест 6: CRUD - Create (Создание валюты)"""
         with self.app.app_context():
             # Создаем валюту
             currency = self.Currency(
@@ -169,7 +169,7 @@ class TestCurrencyApp(unittest.TestCase):
             self.assertEqual(saved.value, 95.0)
     
     def test_07_crud_read_currency(self):
-        """Тест 10: CRUD - Read (Чтение валют)"""
+        """Тест 7: CRUD - Read (Чтение валют)"""
         with self.app.app_context():
             # Создаем несколько валют
             currencies = [
@@ -196,7 +196,7 @@ class TestCurrencyApp(unittest.TestCase):
             self.assertEqual(eur.char_code, "EUR")
     
     def test_08_crud_update_currency(self):
-        """Тест 11: CRUD - Update (Обновление валюты)"""
+        """Тест 8: CRUD - Update (Обновление валюты)"""
         with self.app.app_context():
             # Создаем валюту
             currency = self.Currency(
@@ -221,7 +221,7 @@ class TestCurrencyApp(unittest.TestCase):
             self.assertEqual(updated.char_code, "USD")  # Остальные поля не изменились
     
     def test_09_crud_delete_currency(self):
-        """Тест 12: CRUD - Delete (Удаление валюты)"""
+        """Тест 9: CRUD - Delete (Удаление валюты)"""
         with self.app.app_context():
             # Создаем валюту
             currency = self.Currency(
@@ -247,7 +247,7 @@ class TestCurrencyApp(unittest.TestCase):
             self.assertIsNone(self.Currency.query.get(currency_id))
     
     def test_10_user_currency_relationship(self):
-        """Тест 13: Связь многие-ко-многим User <-> Currency"""
+        """Тест 10: Связь многие-ко-многим User <-> Currency"""
         with self.app.app_context():
             # Создаем пользователя
             user = self.User(
@@ -288,7 +288,7 @@ class TestCurrencyApp(unittest.TestCase):
             self.assertEqual(relation.currency_id, currency.id)
     
     def test_11_is_admin_user_function(self):
-        """Тест 14: Функция проверки прав администратора"""
+        """Тест 11: Функция проверки прав администратора"""
         with self.app.app_context():
             # Создаем обычного пользователя
             regular = self.User(
@@ -318,7 +318,7 @@ class TestCurrencyApp(unittest.TestCase):
             self.assertFalse(is_admin_user(None))  # None
     
     def test_12_api_fetch_currencies_mocked(self):
-        """Тест 15: Получение курсов валют через API (с использованием mock)"""
+        """Тест 12: Получение курсов валют через API (с использованием mock)"""
         # Мок уже настроен в setUp
         
         # Проверяем, что мок работает
@@ -338,7 +338,7 @@ class TestCurrencyApp(unittest.TestCase):
         self.assertEqual(data['Valute']['EUR']['Value'], 98.45)
     
     def test_13_session_management(self):
-        """Тест 16: Работа с сессиями Flask"""
+        """Тест 13: Работа с сессиями Flask"""
         with self.app.app_context():
             # Создаем тестового пользователя
             user = self.User(
@@ -358,7 +358,7 @@ class TestCurrencyApp(unittest.TestCase):
             # (но для этого нужно мокнуть проверки в маршрутах)
     
     def test_14_initial_admin_exists(self):
-        """Тест 17: Проверка существования начального администратора"""
+        """Тест 14: Проверка существования начального администратора"""
         # Этот тест проверяет логику, которая должна быть в init_data()
         with self.app.app_context():
             # Создаем администратора как в init_data()
@@ -390,15 +390,9 @@ def run_tests():
         failfast=False
     )
     
-    print("=" * 60)
-    print("Запуск юнит-тестов для лабораторной работы по валютам")
-    print("=" * 60)
     
     # Запускаем тесты
     result = runner.run(test_suite)
-    
-    print("=" * 60)
-    print(f"ИТОГ: {result.testsRun} тестов выполнено")
     
     if result.failures:
         print(f"ПРОВАЛЕНО: {len(result.failures)}")
@@ -412,12 +406,6 @@ def run_tests():
             print(f"\nОшибка в: {test}")
             print(traceback)
     
-    if result.wasSuccessful():
-        print("✓ Все тесты пройдены успешно!")
-    else:
-        print("✗ Есть проблемы с тестами")
-    
-    print("=" * 60)
     
     return result.wasSuccessful()
 
