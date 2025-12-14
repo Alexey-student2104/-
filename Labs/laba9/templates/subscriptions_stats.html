@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Статистика подписок{% endblock %}
+
+{% block content %}
+<div class="stats-page">
+    <h1>Статистика подписок на валюты</h1>
+    
+    <div class="stats-sections">
+        <div class="stats-section">
+            <h2>Пользователи по количеству подписок</h2>
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Пользователь</th>
+                        <th>Подписок</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in users_stats %}
+                    <tr>
+                        <td>{{ stat.user.username }}</td>
+                        <td>{{ stat.subscription_count }}</td>
+                        <td>
+                            {% if stat.user.is_admin %}
+                            <span class="admin-badge">Админ</span>
+                            {% else %}
+                            <span class="user-badge">Пользователь</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('view_user_subscriptions', user_id=stat.user.id) }}" 
+                               class="btn-view">Подписки</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="stats-section">
+            <h2>Популярность валют</h2>
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Валюта</th>
+                        <th>Код</th>
+                        <th>Подписчиков</th>
+                        <th>Курс</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in currencies_stats %}
+                    <tr>
+                        <td>{{ stat.currency.name }}</td>
+                        <td>{{ stat.currency.char_code }}</td>
+                        <td>{{ stat.subscriber_count }}</td>
+                        <td>{{ "%.2f"|format(stat.currency.value) }} ₽</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="stats-actions">
+        <a href="{{ url_for('admin') }}" class="btn-back">← Назад в админ-панель</a>
+        <a href="{{ url_for('generate_test_subscriptions') }}" 
+           class="btn-submit"
+           onclick="return confirm('Пересоздать подписки?')">
+            Обновить подписки
+        </a>
+    </div>
+</div>
+{% endblock %}

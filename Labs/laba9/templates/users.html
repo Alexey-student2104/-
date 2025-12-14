@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Пользователи{% endblock %}
+
+{% block content %}
+<h1>Список пользователей</h1>
+
+<div class="users-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя пользователя</th>
+                <th>Статус</th>
+                <th>Подписок</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>
+                    {% if user.is_admin %}
+                    <span class="admin-badge">Администратор</span>
+                    {% else %}
+                    <span class="user-badge">Пользователь</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user.currencies %}
+                    {{ user.currencies|length }}
+                    {% else %}
+                    0
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('user', id=user.id) }}" class="btn-view">Профиль</a>
+                    
+                    {% if is_admin %}
+                    <a href="{{ url_for('view_user_subscriptions', user_id=user.id) }}" 
+                       class="btn-subscriptions">Подписки</a>
+                    
+                    <a href="{{ url_for('admin_delete_user', user_id=user.id) }}" 
+                       class="btn-delete"
+                       onclick="return confirm('Удалить пользователя?')">Удалить</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

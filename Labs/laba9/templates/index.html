@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Добро пожаловать на валютный портал!</h1>
+    <p>Здесь вы можете отслеживать курсы валют в реальном времени</p>
+</div>
+
+<div class="dashboard">
+    <h2>Быстрый доступ</h2>
+    <div class="icon-grid">
+        <a href="{{ url_for('author') }}" class="icon-card">
+            <div class="icon">👤</div>
+            <h3>Об авторе</h3>
+            <p>Информация о создателе сайта</p>
+        </a>
+        
+        <a href="{{ url_for('users') }}" class="icon-card">
+            <div class="icon">👥</div>
+            <h3>Пользователи</h3>
+            <p>Список пользователей системы</p>
+        </a>
+        
+        <a href="{{ url_for('currencies') }}" class="icon-card">
+            <div class="icon">💰</div>
+            <h3>Валюты</h3>
+            <p>Курсы валют в реальном времени</p>
+        </a>
+        
+        {% if session.get('user_id') %}
+        <a href="{{ url_for('user_subscriptions') }}" class="icon-card">
+            <div class="icon">📋</div>
+            <h3>Мои подписки</h3>
+            <p>Отслеживаемые валюты</p>
+        </a>
+        {% endif %}
+        
+        {% if session.get('user_id') and is_admin_user(session.get('user_id')) %}
+        <a href="{{ url_for('admin') }}" class="icon-card">
+            <div class="icon">⚙️</div>
+            <h3>Админ-панель</h3>
+            <p>Управление системой</p>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="currency-preview">
+    <h2>Текущие курсы валют</h2>
+    <div class="currency-grid">
+        {% for currency in currencies[:6] %}
+        <div class="currency-card">
+            <h3>{{ currency.char_code }}</h3>
+            <p>{{ currency.name }}</p>
+            <div class="currency-value">{{ "%.2f"|format(currency.value) }} ₽</div>
+            <small>Номинал: {{ currency.nominal }}</small>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Подписки пользователя {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="admin-subscriptions">
+    <h1>Подписки пользователя: {{ user.username }}</h1>
+    
+    <div class="user-info">
+        <p><strong>ID:</strong> {{ user.id }}</p>
+        <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+        <p><strong>Статус:</strong> 
+            {% if user.is_admin %}
+                <span class="admin-badge">Администратор</span>
+            {% else %}
+                <span class="user-badge">Пользователь</span>
+            {% endif %}
+        </p>
+    </div>
+    
+    <div class="subscriptions-list">
+        <h2>Отслеживаемые валюты</h2>
+        
+        {% if subscribed_currencies %}
+        <table class="subscriptions-table">
+            <thead>
+                <tr>
+                    <th>Код</th>
+                    <th>Название</th>
+                    <th>Текущий курс</th>
+                    <th>Номинал</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for currency in subscribed_currencies %}
+                <tr>
+                    <td>{{ currency.char_code }}</td>
+                    <td>{{ currency.name }}</td>
+                    <td>{{ "%.2f"|format(currency.value) }} ₽</td>
+                    <td>{{ currency.nominal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <p class="subscriptions-count">
+            Всего подписок: {{ subscribed_currencies|length }}
+        </p>
+        {% else %}
+        <div class="empty-state">
+            <p>Этот пользователь еще не подписан ни на одну валюту.</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="actions">
+        <a href="{{ url_for('users') }}" class="btn-back">← Назад к списку пользователей</a>
+        {% if is_admin_user(session.get('user_id')) %}
+        <a href="{{ url_for('admin') }}" class="btn-admin">В админ-панель</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

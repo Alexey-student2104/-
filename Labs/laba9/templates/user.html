@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Пользователь {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="user-detail">
+    <h1>Пользователь: {{ user.username }}</h1>
+    
+    <div class="user-info">
+        <p><strong>ID:</strong> {{ user.id }}</p>
+        <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+        <p><strong>Статус:</strong> 
+            {% if user.is_admin %}
+                <span class="admin-badge">Администратор</span>
+            {% else %}
+                <span class="user-badge">Пользователь</span>
+            {% endif %}
+        </p>
+        
+        {% if is_admin_user(session.get('user_id')) %}
+        <p><strong>Хеш пароля:</strong> {{ user.password[:10] }}...</p>
+        {% endif %}
+    </div>
+    
+    <div class="user-subscriptions">
+        <h2>Подписки на валюты</h2>
+        
+        {% if user.currencies %}
+        <div class="currencies-grid compact">
+            {% for subscription in user.currencies %}
+            <div class="currency-card mini">
+                <h4>{{ subscription.currency.char_code }}</h4>
+                <p>{{ subscription.currency.name }}</p>
+                <div class="currency-value">{{ "%.2f"|format(subscription.currency.value) }} ₽</div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <p class="subscriptions-count">
+            Всего подписок: {{ user.currencies|length }}
+        </p>
+        
+        {% if is_admin_user(session.get('user_id')) %}
+        <a href="{{ url_for('view_user_subscriptions', user_id=user.id) }}" 
+           class="btn-view-subscriptions">
+            Просмотреть все подписки
+        </a>
+        {% endif %}
+        
+        {% else %}
+        <div class="empty-state">
+            <p>Этот пользователь еще не подписан ни на одну валюту.</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="actions">
+        <a href="{{ url_for('users') }}" class="btn-back">← Назад к списку</a>
+        
+        {% if session.get('user_id') == user.id %}
+        <a href="{{ url_for('user_subscriptions') }}" class="btn-subscriptions">
+            Управлять моими подписками
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

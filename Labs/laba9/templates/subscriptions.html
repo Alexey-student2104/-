@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Мои подписки{% endblock %}
+
+{% block content %}
+<div class="subscriptions-page">
+    <h1>Мои подписки на валюты</h1>
+    
+    {% if message %}
+    <div class="message success">
+        {{ message }}
+    </div>
+    {% endif %}
+    
+    <div class="subscriptions-container">
+        <div class="subscriptions-section">
+            <h2>Ваши текущие подписки</h2>
+            
+            {% if subscribed_currencies %}
+            <div class="currencies-grid">
+                {% for currency in subscribed_currencies %}
+                <div class="currency-card subscribed">
+                    <div class="currency-header">
+                        <h3>{{ currency.char_code }}</h3>
+                        <span class="currency-badge">Подписан</span>
+                    </div>
+                    <p>{{ currency.name }}</p>
+                    <div class="currency-value">{{ "%.2f"|format(currency.value) }} ₽</div>
+                    <small>Номинал: {{ currency.nominal }}</small>
+                    <div class="currency-actions">
+                        <a href="{{ url_for('unsubscribe_from_currency', currency_id=currency.id) }}" 
+                           class="btn-unsubscribe"
+                           onclick="return confirm('Отписаться от {{ currency.char_code }}?')">
+                            Отписаться
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p>Вы еще не подписаны ни на одну валюту.</p>
+                <p>Выберите валюты из списка ниже, чтобы отслеживать их курсы.</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="subscriptions-section">
+            <h2>Доступные валюты для подписки</h2>
+            
+            <div class="currencies-grid">
+                {% for currency in all_currencies %}
+                    {% set is_subscribed = false %}
+                    {% for sub_currency in subscribed_currencies %}
+                        {% if sub_currency.id == currency.id %}
+                            {% set is_subscribed = true %}
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if not is_subscribed %}
+                    <div class="currency-card available">
+                        <div class="currency-header">
+                            <h3>{{ currency.char_code }}</h3>
+                            <span class="currency-badge">Доступно</span>
+                        </div>
+                        <p>{{ currency.name }}</p>
+                        <div class="currency-value">{{ "%.2f"|format(currency.value) }} ₽</div>
+                        <small>Номинал: {{ currency.nominal }}</small>
+                        <div class="currency-actions">
+                            <a href="{{ url_for('subscribe_to_currency', currency_id=currency.id) }}" 
+                               class="btn-subscribe">
+                                Подписаться
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

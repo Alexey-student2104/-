@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Валюты{% endblock %}
+
+{% block content %}
+<h1>Курсы валют</h1>
+
+{% if session.get('user_id') and is_admin_user(session.get('user_id')) %}
+<div class="currency-actions">
+    <a href="{{ url_for('fetch_currencies') }}" class="btn-submit">Обновить курсы с ЦБ РФ</a>
+</div>
+{% endif %}
+
+<div class="currencies-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>NumCode</th>
+                <th>CharCode</th>
+                <th>Название</th>
+                <th>Курс</th>
+                <th>Номинал</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for currency in currencies %}
+            <tr>
+                <td>{{ currency.id }}</td>
+                <td>{{ currency.num_code }}</td>
+                <td>{{ currency.char_code }}</td>
+                <td>{{ currency.name }}</td>
+                <td>{{ "%.2f"|format(currency.value) }} ₽</td>
+                <td>{{ currency.nominal }}</td>
+                <td>
+                    {% if currency.id in user_subscriptions %}
+                    <span class="subscribed-badge">Подписан</span>
+                    {% else %}
+                    <span class="not-subscribed-badge">Не подписан</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if session.get('user_id') %}
+                        {% if currency.id in user_subscriptions %}
+                        <a href="{{ url_for('unsubscribe_from_currency', currency_id=currency.id) }}" 
+                           class="btn-unsubscribe-small"
+                           onclick="return confirm('Отписаться от {{ currency.char_code }}?')">
+                            Отписаться
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('subscribe_to_currency', currency_id=currency.id) }}" 
+                           class="btn-subscribe-small">
+                            Подписаться
+                        </a>
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% if session.get('user_id') and is_admin_user(session.get('user_id')) %}
+                    <a href="{{ url_for('delete_currency_route', id=currency.id) }}" 
+                       class="btn-delete"
+                       onclick="return confirm('Удалить валюту?')">Удалить</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
